@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Item;
 use App\Models\Stock;
+use DB;
 class ItemController extends Controller
 {
     /**
@@ -58,7 +59,12 @@ class ItemController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $item = Item::find($id);
+        $stock = Stock::find($id);
+        // $item = DB::table('item')->join('stock', 'item.item_id', '=', 'stock.item_id')
+                    // ->where('item.item_id', $id)->first();
+                    // dd($item->quantity);
+        return view('item.edit', compact('item', 'stock'));
     }
 
     /**
