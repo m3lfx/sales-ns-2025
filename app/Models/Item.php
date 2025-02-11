@@ -11,4 +11,5 @@ class Item extends Model
     protected $table = 'item';
     protected $primaryKey = 'item_id';
     public $timestamps = false;
+    protected $fillable = ['description', 'cost_price', 'sell_price'];
 }

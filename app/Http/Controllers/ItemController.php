@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Models\Item;
+use App\Models\Stock;
 class ItemController extends Controller
 {
     /**
@@ -27,7 +28,21 @@ class ItemController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request);
+        // dd($request);
+        $item = Item::create([
+            'description' => trim($request->description),
+            'cost_price' => $request->cost_price,
+            'sell_price' => $request->sell_price
+        ]);
+
+        $stock = New Stock();
+        $stock->item_id = $item->item_id;
+        $stock->quantity = $request->quantity;
+        $stock->save();
+
+        return view('item.create');
+
+
     }
 
     /**

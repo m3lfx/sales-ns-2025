@@ -11,6 +11,10 @@
 
         {!! Form::label('sell', 'sell price', ['class' => 'form-label']) !!}
         {!! Form::number('sell_price', 0.00, ['min' => 0.00, 'step' => 0.01, 'class' => 'form-control', 'id' => 'sell' ]) !!}
+
+        {!! Form::label('qty', 'quantity', ['class' => 'form-label']) !!}
+        {!! Form::number('quantity', 0, ['class' => 'form-control', 'id' => 'qty' ]) !!}
+
         {!! Form::submit('Add item',  ['class'=> "btn btn-primary"]) !!}
         {!! Form::close() !!}
     </div>
