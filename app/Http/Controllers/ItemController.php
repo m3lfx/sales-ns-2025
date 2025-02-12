@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Item;
 use App\Models\Stock;
 use DB;
+use Validator;
+use Storage;
+
 class ItemController extends Controller
 {
     /**
@@ -30,20 +33,35 @@ class ItemController extends Controller
     public function store(Request $request)
     {
         // dd($request);
+        $rules = [
+            'description' => 'required|min:4',
+            'image' => 'mimes:jpg,png'
+        ];
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+        $path = Storage::putFileAs(
+            'public/images',
+            $request->file('image'),
+            $request->file('image')->hashName()
+        );
         $item = Item::create([
             'description' => trim($request->description),
             'cost_price' => $request->cost_price,
-            'sell_price' => $request->sell_price
+            'sell_price' => $request->sell_price,
+            'image' => $path
         ]);
 
-        $stock = New Stock();
+        $stock = new Stock();
         $stock->item_id = $item->item_id;
         $stock->quantity = $request->quantity;
         $stock->save();
 
-        return view('item.create');
-
-
+        return view('item.create')->with('success', 'item added');
     }
 
     /**
@@ -62,8 +80,8 @@ class ItemController extends Controller
         $item = Item::find($id);
         $stock = Stock::find($id);
         // $item = DB::table('item')->join('stock', 'item.item_id', '=', 'stock.item_id')
-                    // ->where('item.item_id', $id)->first();
-                    // dd($item->quantity);
+        // ->where('item.item_id', $id)->first();
+        // dd($item->quantity);
         return view('item.edit', compact('item', 'stock'));
     }
 
