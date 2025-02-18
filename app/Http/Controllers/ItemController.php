@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Item;
 use App\Models\Stock;
 use App\Imports\ItemImport;
+use App\Imports\ItemStockImport;
 use DB;
 use Validator;
 use Storage;
@@ -109,7 +110,7 @@ class ItemController extends Controller
     {
       
         Excel::import(
-            new ItemImport,
+            new ItemStockImport,
             request()
                 ->file('item_upload')
                 ->storeAs(
