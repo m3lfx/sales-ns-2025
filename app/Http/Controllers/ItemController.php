@@ -122,4 +122,12 @@ class ItemController extends Controller
         );
         return redirect()->back()->with('success', 'Excel file Imported Successfully');
     }
+
+    public function getItems()
+    {
+        $items = DB::table('item')->join('stock', 'item.item_id', '=', 'stock.item_id')->get();
+      
+       
+        return view('shop.index', compact('items'));
+    }
 }

@@ -14,8 +14,9 @@ use App\Http\Controllers\ItemController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+Route::get('/', [ItemController::class, 'getItems'])->name('getItems');
 Route::post('/items-import', [ItemController::class, 'import'])->name('item.import');
 Route::resource('items', ItemController::class);
