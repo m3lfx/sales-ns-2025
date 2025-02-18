@@ -127,7 +127,7 @@ class ItemController extends Controller
 
     public function getItems()
     {
-        dump(Session::get('cart'));
+        // dump(Session::get('cart'));
         $items = DB::table('item')->join('stock', 'item.item_id', '=', 'stock.item_id')->get();
       
        
@@ -151,5 +151,16 @@ class ItemController extends Controller
         // dd(Session::get('cart'));
 
         return redirect('/')->with('success', 'item added to cart');
+    }
+
+    public function getCart()
+    {
+        if (!Session::has('cart')) {
+            return view('shop.shopping-cart');
+        }
+        $oldCart = Session::get('cart');
+        $cart = new Cart($oldCart);
+        // dd($cart);
+        return view('shop.shopping-cart', ['products' => $cart->items, 'totalPrice' => $cart->totalPrice]);
     }
 }
