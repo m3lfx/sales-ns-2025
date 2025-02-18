@@ -11,6 +11,8 @@ use DB;
 use Validator;
 use Storage;
 use Excel;
+use Session;
+use App\Cart;
 
 class ItemController extends Controller
 {
@@ -125,9 +127,29 @@ class ItemController extends Controller
 
     public function getItems()
     {
+        dump(Session::get('cart'));
         $items = DB::table('item')->join('stock', 'item.item_id', '=', 'stock.item_id')->get();
       
        
         return view('shop.index', compact('items'));
+    }
+
+    public function addToCart($id)
+    {
+        
+        $item = Item::find($id);
+        $oldCart = Session::has('cart') ? Session::get('cart') : null;
+        // dd($oldCart);
+        $cart = new Cart($oldCart);
+        // dd($cart);
+        $cart->add($item, $id);
+
+        Session::put('cart', $cart);
+        
+        // $request->session()->save();
+        // Session::save();
+        // dd(Session::get('cart'));
+
+        return redirect('/')->with('success', 'item added to cart');
     }
 }
