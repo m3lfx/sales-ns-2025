@@ -51,4 +51,12 @@ class Cart
         }
     }
 
+    public function removeItem($id)
+    {
+        //dd($this->items);
+        $this->totalQty -= $this->items[$id]['qty'];
+        $this->totalPrice -= $this->items[$id]['price'];
+        unset($this->items[$id]);
+    }
+
 }

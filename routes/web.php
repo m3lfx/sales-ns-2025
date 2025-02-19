@@ -21,6 +21,6 @@ Route::get('/', [ItemController::class, 'getItems'])->name('getItems');
 Route::get('/add-to-cart/{id}', [ItemController::class, 'addToCart'])->name('addToCart');
 Route::get('/shopping-cart', [ItemController::class, 'getCart'])->name('getCart');
 Route::get('/reduce/{id}', [ItemController::class, 'getReduceByOne'])->name('reduceByOne');
-
+Route::get('/remove/{id}', [ItemController::class, 'getRemoveItem'])->name('removeItem');
 Route::post('/items-import', [ItemController::class, 'import'])->name('item.import');
 Route::resource('items', ItemController::class);
