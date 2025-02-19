@@ -5,7 +5,7 @@
 @endsection
 
 @section('body')
-   {{ dd($products)}}
+   {{-- {{ dd($products)}} --}}
     @if (Session::has('cart'))
     
         <div class="row">
@@ -18,14 +18,14 @@
                             <span class="label label-success">{{ $product['price'] }}</span>
                             <div class="dropdown">
                                 <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                  Dropdown button
+                                  Choose
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                    <li><a href="{{ route('reduceByOne',$product['item']['item_id']) }}">Reduce By 1</a></li> 
                                         <li><a href="{{ route('removeItem', $product['item']['item_id']) }}">Reduce All</a></li> 
                                         {{-- <li><a class="dropdown-item" href="#">Reduce By 1</a></li> --}}
 
-                                        <li><a class="dropdown-item" href="#">Reduce All</a></li>
+                                        {{-- <li><a class="dropdown-item" href="#">Reduce All</a></li> --}}
                                 </ul>
                               </div>
                           

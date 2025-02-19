@@ -155,6 +155,7 @@ class ItemController extends Controller
 
     public function getCart()
     {
+        dump(Session::get('cart'));
         if (!Session::has('cart')) {
             return view('shop.shopping-cart');
         }
