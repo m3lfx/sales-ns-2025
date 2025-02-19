@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Item;
 use App\Models\Stock;
+use App\Models\Order;
 use App\Imports\ItemImport;
 use App\Imports\ItemStockImport;
 use DB;
@@ -194,20 +195,22 @@ class ItemController extends Controller
 
     public function postCheckout()
     {
+
         if (!Session::has('cart')) {
             return redirect()->route('getCart');
         }
         $oldCart = Session::get('cart');
         $cart = new Cart($oldCart);
-        dd($cart->items);
+        // dd($cart, $cart->items);
         try {
             DB::beginTransaction();
             $order = new Order();
+            $order->customer_id = 1;
             $order->date_placed = now();
             $order->date_shipped = Carbon::now()->addDays(5);
 
             $order->shipping = 10.00;
-            $order->status = 'Processing';
+            // $order->status = 'Processing';
             $order->save();
             // dd($cart->items);
             foreach ($cart->items as $items) {
@@ -227,7 +230,7 @@ class ItemController extends Controller
             }
             // dd($order);
         } catch (\Exception $e) {
-            // dd($e->getMessage());
+            dd($e->getMessage());
             DB::rollback();
             // dd($order);
             return redirect()->route('getCart')->with('error', $e->getMessage());
