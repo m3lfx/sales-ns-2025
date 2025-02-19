@@ -110,7 +110,7 @@ class ItemController extends Controller
 
     public function import()
     {
-      
+
         Excel::import(
             new ItemStockImport,
             request()
@@ -129,14 +129,14 @@ class ItemController extends Controller
     {
         // dump(Session::get('cart'));
         $items = DB::table('item')->join('stock', 'item.item_id', '=', 'stock.item_id')->get();
-      
-       
+
+
         return view('shop.index', compact('items'));
     }
 
     public function addToCart($id)
     {
-        
+
         $item = Item::find($id);
         $oldCart = Session::has('cart') ? Session::get('cart') : null;
         // dd($oldCart);
@@ -145,7 +145,7 @@ class ItemController extends Controller
         $cart->add($item, $id);
 
         Session::put('cart', $cart);
-        
+
         // $request->session()->save();
         // Session::save();
         // dd(Session::get('cart'));
@@ -172,7 +172,6 @@ class ItemController extends Controller
         $cart->reduceByOne($id);
         if (count($cart->items) > 0) {
             Session::put('cart', $cart);
-          
         } else {
             Session::forget('cart');
         }
@@ -186,10 +185,55 @@ class ItemController extends Controller
         $cart->removeItem($id);
         if (count($cart->items) > 0) {
             Session::put('cart', $cart);
-            
         } else {
             Session::forget('cart');
         }
         return redirect()->route('getCart');
+    }
+
+    public function postCheckout()
+    {
+        if (!Session::has('cart')) {
+            return redirect()->route('getCart');
+        }
+        $oldCart = Session::get('cart');
+        $cart = new Cart($oldCart);
+        dd($cart->items);
+        try {
+            DB::beginTransaction();
+            $order = new Order();
+            $order->date_placed = now();
+            $order->date_shipped = Carbon::now()->addDays(5);
+
+            $order->shipping = 10.00;
+            $order->status = 'Processing';
+            $order->save();
+            // dd($cart->items);
+            foreach ($cart->items as $items) {
+                $id = $items['item']['item_id'];
+                // dd($id);
+                DB::table('orderline')
+                    ->insert(
+                        [
+                            'item_id' => $id,
+                            'orderinfo_id' => $order->orderinfo_id,
+                            'quantity' => $items['qty']
+                        ]
+                    );
+                $stock = Stock::find($id);
+                $stock->quantity = $stock->quantity - $items['qty'];
+                $stock->save();
+            }
+            // dd($order);
+        } catch (\Exception $e) {
+            // dd($e->getMessage());
+            DB::rollback();
+            // dd($order);
+            return redirect()->route('getCart')->with('error', $e->getMessage());
+        }
+
+        DB::commit();
+        Session::forget('cart');
+        return redirect('/')->with('success', 'Successfully Purchased Your Products!!!');
     }
 }
