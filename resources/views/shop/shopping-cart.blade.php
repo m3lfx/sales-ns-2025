@@ -13,7 +13,7 @@
                 <ul class="list-group">
                     @foreach ($products as $product)
                         <li class="list-group-item">
-                            <span class="badge">{{ $product['qty'] }}</span>
+                            <span class="badge rounded-pill bg-danger">{{ $product['qty'] }}</span>
                             <strong>{{ $product['item']['description'] }}</strong>
                             <span class="label label-success">{{ $product['price'] }}</span>
                             <div class="dropdown">

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Item;
 use App\Models\Stock;
 use App\Models\Order;
+use App\Models\Customer;
 use App\Imports\ItemImport;
 use App\Imports\ItemStockImport;
 use DB;
@@ -15,6 +16,7 @@ use Excel;
 use Session;
 use App\Cart;
 use Carbon\Carbon;
+use Auth;
 
 class ItemController extends Controller
 {
@@ -157,7 +159,7 @@ class ItemController extends Controller
 
     public function getCart()
     {
-        dump(Session::get('cart'));
+        // dump(Session::get('cart'));
         if (!Session::has('cart')) {
             return view('shop.shopping-cart');
         }
@@ -203,9 +205,11 @@ class ItemController extends Controller
         $cart = new Cart($oldCart);
         // dd($cart, $cart->items);
         try {
+            $customer = Customer::where('user_id', Auth::id())->first();
+            // dd($customer);
             DB::beginTransaction();
             $order = new Order();
-            $order->customer_id = 1;
+            $order->customer_id = $customer->customer_id;
             $order->date_placed = now();
             $order->date_shipped = Carbon::now()->addDays(5);
 
