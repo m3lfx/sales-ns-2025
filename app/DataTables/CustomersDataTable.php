@@ -11,6 +11,8 @@ use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
+use Auth;
+use DB;
 
 class CustomersDataTable extends DataTable
 {
@@ -19,19 +21,35 @@ class CustomersDataTable extends DataTable
      *
      * @param QueryBuilder $query Results from query() method.
      */
-    public function dataTable(QueryBuilder $query): EloquentDataTable
+    public function dataTable($query)
     {
-        return (new EloquentDataTable($query))
-            ->addColumn('action', 'customers.action')
+        return datatables()->query($query)
+            ->addColumn('role',  function ($row) {
+                return view('users.role', compact('row'));
+               
+            })
+            ->rawColumns(['role'])
             ->setRowId('id');
     }
 
     /**
      * Get the query source of dataTable.
      */
-    public function query(Customer $model): QueryBuilder
+    public function query()
     {
-        return $model->newQuery();
+        $users = DB::table('users')
+            ->join('customer', 'users.id', '=', 'customer.user_id')
+            ->select(
+                'users.id AS id',
+                'users.name',
+                'users.email',
+                'customer.addressline',
+                'customer.phone',
+                'users.created_at'
+            )
+            ->where('users.id', '<>', Auth::id());
+        //  dd($users);
+         return $users;
     }
 
     /**
@@ -62,15 +80,19 @@ class CustomersDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::computed('action')
-                  ->exportable(false)
-                  ->printable(false)
-                  ->width(60)
-                  ->addClass('text-center'),
-            Column::make('id'),
-            Column::make('add your columns'),
-            Column::make('created_at'),
-            Column::make('updated_at'),
+
+            Column::make('id')->title('user id'),
+
+            Column::make('name'),
+            Column::make('email'),
+            Column::make('addressline')->title('address'),
+            Column::make('phone')->searchable(false),
+            Column::make('created_at')->searchable(false),
+            Column::computed('role')
+                ->exportable(false)
+                ->printable(false)
+                ->width(200)
+                ->addClass('text-center'),
         ];
     }
 

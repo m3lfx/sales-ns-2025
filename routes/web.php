@@ -36,6 +36,8 @@ Route::get('/logout', [UserController::class, 'logout'])->name('user.logout');
 Route::post('/items-import', [ItemController::class, 'import'])->name('item.import');
 
 Route::get('/admin/users',[DashboardController::class,'getUsers'])->name('admin.users');
+Route::get('/admin/customers',[DashboardController::class,'getCustomers'])->name('admin.customers');
+Route::post('/user/update/{id}',[UserController::class,'update_role'])->name('users.update');
 
 Route::resource('items', ItemController::class);
 
