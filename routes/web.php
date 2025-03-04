@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,7 +21,8 @@ use App\Http\Controllers\UserController;
 // });
 // composer require laravel/ui
 // php artisan ui bootstrap --auth
-// npm install && npm run dev
+// npm install 
+// npm run dev
 
 Route::get('/', [ItemController::class, 'getItems'])->name('getItems');
 Route::get('/add-to-cart/{id}', [ItemController::class, 'addToCart'])->name('addToCart');
@@ -32,6 +34,9 @@ Route::get('/logout', [UserController::class, 'logout'])->name('user.logout');
 
 
 Route::post('/items-import', [ItemController::class, 'import'])->name('item.import');
+
+Route::get('/admin/users',[DashboardController::class,'getUsers'])->name('admin.users');
+
 Route::resource('items', ItemController::class);
 
 Auth::routes();
