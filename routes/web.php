@@ -38,6 +38,7 @@ Route::post('/items-import', [ItemController::class, 'import'])->name('item.impo
 Route::get('/admin/users',[DashboardController::class,'getUsers'])->name('admin.users');
 Route::get('/admin/customers',[DashboardController::class,'getCustomers'])->name('admin.customers');
 Route::post('/user/update/{id}',[UserController::class,'update_role'])->name('users.update');
+Route::get('/admin/orders',[DashboardController::class,'getOrders'])->name('admin.orders');
 
 Route::resource('items', ItemController::class);
 
