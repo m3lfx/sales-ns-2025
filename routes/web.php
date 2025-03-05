@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
-
+use App\Http\Controllers\OrderController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -35,11 +35,17 @@ Route::get('/logout', [UserController::class, 'logout'])->name('user.logout');
 
 Route::post('/items-import', [ItemController::class, 'import'])->name('item.import');
 
-Route::get('/admin/users',[DashboardController::class,'getUsers'])->name('admin.users');
-Route::get('/admin/customers',[DashboardController::class,'getCustomers'])->name('admin.customers');
-Route::post('/user/update/{id}',[UserController::class,'update_role'])->name('users.update');
-Route::get('/admin/orders',[DashboardController::class,'getOrders'])->name('admin.orders');
 
+Route::post('/user/update/{id}', [UserController::class, 'update_role'])->name('users.update');
+
+
+Route::prefix('admin')->group(function () {
+    Route::get('/users', [DashboardController::class, 'getUsers'])->name('admin.users');
+    Route::get('/customers', [DashboardController::class, 'getCustomers'])->name('admin.customers');
+    Route::get('/orders', [DashboardController::class, 'getOrders'])->name('admin.orders');
+    Route::get('/order/{id}', [OrderController::class, 'processOrder'])->name('admin.orderDetails');
+    Route::post('/order/{id}', [OrderController::class, 'orderUpdate'])->name('admin.orderUpdate');
+});
 Route::resource('items', ItemController::class);
 
 Auth::routes();

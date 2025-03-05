@@ -21,9 +21,9 @@
 
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     @if (Auth::check() && Auth::user()->role === 'admin')
-                         {{-- <a class="dropdown-item" href="{{ route('dashboard.index') }}">dashboard </a>
-                        <a class="dropdown-item" href="{{ route('user.profile') }}">User Profile</a>  --}}
-                        <a class="dropdown-item" href="#">Orders </a> 
+                         <a class="dropdown-item" href="{{ route('admin.orders') }}">Orders</a>
+                        <a class="dropdown-item" href="{{ route('admin.users') }}">Users</a> 
+                        {{-- <a class="dropdown-item" href="#">Orders </a>  --}}
                        <a class="dropdown-item" href="#">User Profile</a> 
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{{ route('logout') }}">Logout </a>
