@@ -31,7 +31,7 @@ class UserSeeder extends Seeder
             $customer->title = $faker->randomElement($array = array ('ms.','mr.','miss','dr.'));
             $customer->fname = $fname;
             $customer->lname = $lname;
-            $customer->addressline = $faker->address();
+            $customer->addressline = $faker->randomElement($array = array('taguig', 'makati', 'las pinas', 'pasay','muntinlupa', 'pateros'));
             $customer->town = $faker->city();
             $customer->zipcode = '0000';
             $customer->phone = '091800000';

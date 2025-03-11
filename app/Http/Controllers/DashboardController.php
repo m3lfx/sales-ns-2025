@@ -9,6 +9,8 @@ use App\DataTables\CustomersDataTable;
 use App\DataTables\OrdersDataTable;
 use DB;
 use App\Charts\MonthlySales;
+use App\Charts\CustomerChart;
+use App\Charts\ItemChart;
 
 class DashboardController extends Controller
 {
@@ -53,9 +55,9 @@ class DashboardController extends Controller
             'line',
             array_values($orders)
         );
-        $dataset = $dataset->backgroundColor($this->bgcolor);
+        // $dataset = $dataset->backgroundColor('#AAAAAA');
         $salesChart->options([
-            'indexAxis' => 'x',
+            'indexAxis' => 'y',
             'responsive' => true,
             'legend' => ['display' => true],
             'tooltips' => ['enabled' => true],
@@ -75,7 +77,72 @@ class DashboardController extends Controller
             ],
         ]);
 
-        return view('dashboard.index', compact('salesChart'));
+        $customer = DB::table('customer')
+            ->whereNotNull('addressline')
+            ->groupBy('addressline')
+            ->orderBy('total')
+            ->pluck(DB::raw('count(addressline) as total'), 'addressline')->all();
+
+        // dd($customer);
+        // dd(array_values($customer));
+        $customerChart = new CustomerChart;
+        $dataset = $customerChart->labels(array_keys($customer));
+        $dataset = $customerChart->dataset(
+            'Customer Demographics',
+            'bar',
+            array_values($customer)
+        );
+        $dataset = $dataset->backgroundColor($this->bgcolor);
+
+        $customerChart->options([
+            
+            'responsive' => true,
+            'legend' => ['display' => true],
+            'tooltips' => ['enabled' => true],
+            'aspectRatio' => 1,
+            'scales' => [
+                'yAxes' => [
+                    [
+                        'display' => true,
+                    ],
+                ],
+                'xAxes' => [
+                    [
+                        'gridLines' => ['display' => false],
+                        'display' => true,
+                    ],
+                ],
+            ],
+        ]);
+
+        $items = DB::table('orderline AS ol')
+        ->join('item AS i', 'ol.item_id', '=', 'i.item_id')
+        ->groupBy('i.description')
+        ->orderBy('total', 'DESC')
+        ->pluck(DB::raw('sum(ol.quantity) AS total'), 'description')
+        ->all();
+
+        $itemChart = new ItemChart;
+        $dataset = $itemChart->labels(array_keys($items));
+        // dd($dataset);
+        $dataset = $itemChart->dataset(
+            'Item sold',
+            'pie',
+            array_values($items)
+        );
+       
+        $dataset = $dataset->backgroundColor($this->bgcolor);
+       
+        $dataset = $dataset->fill(false);
+        $itemChart->options([
+            'responsive' => true,
+            'legend' => ['display' => true],
+            'tooltips' => ['enabled' => true],
+            'aspectRatio' => 1,
+    ]);
+
+
+        return view('dashboard.index', compact('salesChart', 'customerChart', 'itemChart'));
     }
     public function getUsers(UsersDataTable $dataTable)
     {

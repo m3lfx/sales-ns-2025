@@ -12,6 +12,21 @@
                 {!! $salesChart->container() !!}
 
             </div>
+            <div class="container">
+                <hr>
+                <h2>customer chart</h2>
+                {!! $customerChart->container() !!}
+
+            </div>
+            <div class="container">
+                <hr>
+                <h2>item sold chart</h2>
+                {!! $itemChart->container() !!}
+
+            </div>
             {!! $salesChart->script() !!}
+            {!! $customerChart->script() !!}
+            {!! $itemChart->script() !!}
+        
         </div>
     @endsection
