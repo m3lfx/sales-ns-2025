@@ -91,7 +91,9 @@ class ItemController extends Controller
     public function edit(string $id)
     {
         $item = Item::find($id);
-        $stock = Stock::find($id);
+       
+        $stock = Stock::findorfail($id);
+        // dd($stock);
         // $item = DB::table('item')->join('stock', 'item.item_id', '=', 'stock.item_id')
         // ->where('item.item_id', $id)->first();
         // dd($item->quantity);

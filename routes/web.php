@@ -5,6 +5,8 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\SearchController;
+use App\Http\Controllers\CustomerController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -47,7 +49,10 @@ Route::prefix('admin')->group(function () {
     Route::post('/order/{id}', [OrderController::class, 'orderUpdate'])->name('admin.orderUpdate');
 });
 Route::get('/dashboard',[DashboardController::class, 'index'])->name('dashboard.index');
+Route::get('/search', [SearchController::class, 'search'])->name('search');
+
 Route::resource('items', ItemController::class);
+Route::resource('customers', ItemController::class);
 
 Auth::routes();
 
