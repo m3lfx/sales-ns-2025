@@ -29,4 +29,9 @@ class Customer extends Model implements Searchable
     {
         return $this->belongsTo(User::class);
     }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'customer_id');
+    }
 }

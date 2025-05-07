@@ -16,8 +16,12 @@ class CustomerController extends Controller
     {
       
         // $customer = User::find(2)->customer();
-        $customer = Customer::find(2)->user->email;
-        dd($customer);
+        // $customer = Customer::find(2)->user->email;
+        $orders = Customer::find(1)->orders;
+        foreach($orders as $order){
+            dump($order->status);
+        }
+        // dd($orders);
 
     }
 
