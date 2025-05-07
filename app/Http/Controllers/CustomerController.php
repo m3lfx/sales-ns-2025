@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Customer;
 use App\Models\User;
+use App\Models\Order;
+
 
 
 class CustomerController extends Controller
@@ -17,11 +19,12 @@ class CustomerController extends Controller
       
         // $customer = User::find(2)->customer();
         // $customer = Customer::find(2)->user->email;
-        $orders = Customer::find(1)->orders;
-        foreach($orders as $order){
-            dump($order->status);
-        }
-        // dd($orders);
+        // $orders = Customer::find(1)->orders;
+        // foreach($orders as $order){
+        //     dump($order->status);
+        // }
+        $customer = Order::find(72)->customer;
+        dd($customer);
 
     }
 
