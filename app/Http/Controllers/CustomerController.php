@@ -34,10 +34,17 @@ class CustomerController extends Controller
         //     }
         // dd($orders);
         // $orders = Order::all();
-        $orders = Order::with('customer')->get();
+        $orders = Order::with(['customer', 'items'])->get();
         // dd($orders);
+        // foreach($orders as $order){
+        //     dump($order->customer->lname);
+        // }
+
         foreach($orders as $order){
-            dump($order->customer->lname);
+            foreach($order->items as $item){
+                dump($item->description);
+            }
+            // dump($order->items->description);
         }
 
     }
