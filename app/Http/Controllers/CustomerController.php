@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Customer;
+use App\Models\User;
+
 
 class CustomerController extends Controller
 {
@@ -11,7 +14,11 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        //
+      
+        // $customer = User::find(2)->customer();
+        $customer = Customer::find(2)->user->email;
+        dd($customer);
+
     }
 
     /**

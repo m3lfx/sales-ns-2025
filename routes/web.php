@@ -52,7 +52,7 @@ Route::get('/dashboard',[DashboardController::class, 'index'])->name('dashboard.
 Route::get('/search', [SearchController::class, 'search'])->name('search');
 
 Route::resource('items', ItemController::class);
-Route::resource('customers', ItemController::class);
+Route::resource('customers', CustomerController::class);
 
 Auth::routes();
 
