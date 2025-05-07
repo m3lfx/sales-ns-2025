@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Customer;
 use App\Models\User;
 use App\Models\Order;
+use App\Models\Item;
 
 
 
@@ -24,8 +25,11 @@ class CustomerController extends Controller
         //     dump($order->status);
         // }
         // $customer = Order::find(72)->customer;
-        $items = Order::find(72)->items;
-        dd($items);
+        // $items = Order::find(72)->items;
+        // dd($items);
+
+        $orders = Item::find(34)->orders;
+        dd($orders);
 
     }
 
