@@ -35,19 +35,22 @@ class CustomerController extends Controller
         // dd($orders);
         // $orders = Order::all();
         // $orders = Order::withWhereHas(['customer', 'items'])->get();
-        $orders = Order::withWhereHas('customer')->get();
-        dd($orders);
+        // $orders = Order::withWhereHas('customer')->where('status', 'delivered')->get();
+        $orders = Order::withWhereHas('customer', function ($query) {
+            $query->where('town', 'like', '%taguig%');
+        })->get();
+        // dd($orders);
+        foreach($orders as $order){
+            dump($order->customer->town);
+        }
+
         // foreach($orders as $order){
         //     dump($order->customer->lname);
+        //     foreach($order->items as $item){
+        //         dump($item->description);
+        //     }
+        //     // dump($order->items->description);
         // }
-
-        foreach($orders as $order){
-            dump($order->customer->lname);
-            foreach($order->items as $item){
-                dump($item->description);
-            }
-            // dump($order->items->description);
-        }
 
     }
 
