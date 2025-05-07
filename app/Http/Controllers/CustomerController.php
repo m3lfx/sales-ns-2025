@@ -29,7 +29,10 @@ class CustomerController extends Controller
         // dd($items);
 
         $orders = Item::find(34)->orders;
-        dd($orders);
+        foreach($orders as $order){
+                dump($order->pivot->quantity);
+            }
+        // dd($orders);
 
     }
 
