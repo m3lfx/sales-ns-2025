@@ -23,8 +23,9 @@ class CustomerController extends Controller
         // foreach($orders as $order){
         //     dump($order->status);
         // }
-        $customer = Order::find(72)->customer;
-        dd($customer);
+        // $customer = Order::find(72)->customer;
+        $items = Order::find(72)->items;
+        dd($items);
 
     }
 
