@@ -28,11 +28,17 @@ class CustomerController extends Controller
         // $items = Order::find(72)->items;
         // dd($items);
 
-        $orders = Item::find(34)->orders;
-        foreach($orders as $order){
-                dump($order->pivot->quantity);
-            }
+        // $orders = Item::find(34)->orders;
+        // foreach($orders as $order){
+        //         dump($order->pivot->quantity);
+        //     }
         // dd($orders);
+        // $orders = Order::all();
+        $orders = Order::with('customer')->get();
+        // dd($orders);
+        foreach($orders as $order){
+            dump($order->customer->lname);
+        }
 
     }
 
