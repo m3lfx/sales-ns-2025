@@ -29,6 +29,7 @@ class ItemController extends Controller
        
         // $items = Item::all();
         $items = DB::table('item')->join('stock', 'item.item_id', '=', 'stock.item_id')->get();
+      
         return view('item.index', compact('items'));
     }
 
@@ -136,8 +137,12 @@ class ItemController extends Controller
     public function getItems()
     {
         // dump(Session::get('cart'));
-        $items = DB::table('item')->join('stock', 'item.item_id', '=', 'stock.item_id')->get();
-
+        // $items = DB::table('item')->join('stock', 'item.item_id', '=', 'stock.item_id')->get();
+        $items = Item::withWhereHas('stock')->get();
+        // dd($items);
+        // foreach($items as $item){
+        //  dump($item->stock->quantity);
+        // }
 
         return view('shop.index', compact('items'));
     }

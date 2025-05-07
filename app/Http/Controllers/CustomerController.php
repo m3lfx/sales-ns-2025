@@ -34,13 +34,15 @@ class CustomerController extends Controller
         //     }
         // dd($orders);
         // $orders = Order::all();
-        $orders = Order::with(['customer', 'items'])->get();
-        // dd($orders);
+        // $orders = Order::withWhereHas(['customer', 'items'])->get();
+        $orders = Order::withWhereHas('customer')->get();
+        dd($orders);
         // foreach($orders as $order){
         //     dump($order->customer->lname);
         // }
 
         foreach($orders as $order){
+            dump($order->customer->lname);
             foreach($order->items as $item){
                 dump($item->description);
             }

@@ -29,4 +29,9 @@ class Item extends Model implements Searchable
     {
         return $this->belongsToMany(Order::class, 'orderline', 'item_id', 'orderinfo_id')->withPivot('quantity');
     }
+
+    public function stock()
+    {
+        return $this->hasOne(stock::class, 'item_id');
+    }
 }
