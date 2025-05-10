@@ -218,25 +218,28 @@ class ItemController extends Controller
             // dd($customer);
             DB::beginTransaction();
             $order = new Order();
-            $order->customer_id = $customer->customer_id;
+            // $order->customer_id = $customer->customer_id;
             $order->date_placed = now();
             $order->date_shipped = Carbon::now()->addDays(5);
 
             $order->shipping = 10.00;
             // $order->status = 'Processing';
-            $order->save();
+
+            // $order->save();
             // dd($cart->items);
+            $customer->orders()->save($order);
             foreach ($cart->items as $items) {
                 $id = $items['item']['item_id'];
                 // dd($id);
-                DB::table('orderline')
-                    ->insert(
-                        [
-                            'item_id' => $id,
-                            'orderinfo_id' => $order->orderinfo_id,
-                            'quantity' => $items['qty']
-                        ]
-                    );
+                $order->items()->attach($order->orderinfo_id, ['item_id' => $id, 'quantity' => $items['qty'] ]);
+                // DB::table('orderline')
+                //     ->insert(
+                //         [
+                //             'item_id' => $id,
+                //             'orderinfo_id' => $order->orderinfo_id,
+                //             'quantity' => $items['qty']
+                //         ]
+                //     );
                 $stock = Stock::find($id);
                 $stock->quantity = $stock->quantity - $items['qty'];
                 $stock->save();
